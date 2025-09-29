@@ -11,7 +11,7 @@ use nalgebra::{Vector3, Quaternion, UnitQuaternion};
 use std::collections::HashMap;
 
 /// Main scene definition
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SceneDefinition {
     /// Scene metadata
     pub metadata: SceneMetadata,
@@ -24,7 +24,7 @@ pub struct SceneDefinition {
 }
 
 /// Scene metadata
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SceneMetadata {
     pub version: String,
     pub title: String,
@@ -33,7 +33,7 @@ pub struct SceneMetadata {
 }
 
 /// Global scene properties
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SceneGlobals {
     pub background: Color,
     pub fog: Option<Fog>,
@@ -42,7 +42,7 @@ pub struct SceneGlobals {
 }
 
 /// Scene node definition
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SceneNode {
     /// Unique identifier for the node
     pub id: String,
@@ -69,7 +69,7 @@ pub struct SceneNode {
 }
 
 /// Node type enumeration
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum NodeType {
     /// 3D geometry object
@@ -85,7 +85,7 @@ pub enum NodeType {
 }
 
 /// Node properties (flattened into node)
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum NodeProperties {
     /// Geometry node properties
@@ -101,7 +101,7 @@ pub enum NodeProperties {
 }
 
 /// Geometry node properties
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GeometryProperties {
     /// Geometry primitive type
     pub primitive: GeometryPrimitive,
@@ -114,7 +114,7 @@ pub struct GeometryProperties {
 }
 
 /// Geometry primitive types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum GeometryPrimitive {
     Box,
@@ -128,7 +128,7 @@ pub enum GeometryPrimitive {
 }
 
 /// Light node properties
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LightProperties {
     /// Light type
     pub light_type: LightType,
@@ -147,7 +147,7 @@ pub struct LightProperties {
 }
 
 /// Light types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum LightType {
     Directional,
@@ -156,7 +156,7 @@ pub enum LightType {
 }
 
 /// Camera node properties
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CameraProperties {
     /// Camera type
     pub camera_type: CameraType,
@@ -175,7 +175,7 @@ pub struct CameraProperties {
 }
 
 /// Camera types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum CameraType {
     Perspective,
@@ -183,13 +183,13 @@ pub enum CameraType {
 }
 
 /// Empty node properties
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmptyProperties {
     // Empty nodes have no specific properties
 }
 
 /// Particle system properties
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ParticleProperties {
     /// Maximum number of particles
     pub max_particles: usize,
@@ -214,7 +214,7 @@ pub struct ParticleProperties {
 }
 
 /// Material definition
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Material {
     /// Material type
     #[serde(rename = "type")]
@@ -237,7 +237,7 @@ pub struct Material {
 }
 
 /// Material types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum MaterialType {
     Standard,
@@ -247,7 +247,7 @@ pub enum MaterialType {
 }
 
 /// Physics body properties
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PhysicsBody {
     /// Physics body type
     #[serde(rename = "type")]
@@ -276,7 +276,7 @@ pub struct PhysicsBody {
 }
 
 /// Physics body types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum PhysicsBodyType {
     Static,
@@ -285,7 +285,7 @@ pub enum PhysicsBodyType {
 }
 
 /// Collision shape types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum CollisionShape {
     Box { size: Vector3<f32> },
@@ -297,7 +297,7 @@ pub enum CollisionShape {
 }
 
 /// Force definition for physics
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Force {
     /// Force type
     #[serde(rename = "type")]
@@ -317,7 +317,7 @@ pub struct Force {
 }
 
 /// Force types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ForceType {
     Constant,
@@ -328,7 +328,7 @@ pub enum ForceType {
 }
 
 /// Transform definition
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Transform {
     /// Position in 3D space
     pub position: Vector3<f32>,
@@ -341,7 +341,7 @@ pub struct Transform {
 }
 
 /// Color definition (RGBA)
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Color {
     pub r: f32,
     pub g: f32,
@@ -350,7 +350,7 @@ pub struct Color {
 }
 
 /// Fog definition
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Fog {
     /// Fog type
     #[serde(rename = "type")]
@@ -370,7 +370,7 @@ pub struct Fog {
 }
 
 /// Fog types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum FogType {
     Linear,
@@ -379,7 +379,7 @@ pub enum FogType {
 }
 
 /// Physics configuration
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PhysicsConfig {
     /// Enable physics simulation
     pub enabled: bool,

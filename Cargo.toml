@@ -3,7 +3,7 @@ name = "jigen"
 version = "0.1.0"
 edition = "2021"
 description = "Declarative 3D Scene DSL with Physics Simulation using Bevy and WASM"
-license = "MIT OR Apache-2.0"
+license = "Apache-2.0"
 repository = "https://github.com/junkawasaki/jigen"
 keywords = ["3d", "dsl", "physics", "bevy", "wasm"]
 categories = ["game-development", "graphics", "simulation"]
@@ -59,6 +59,9 @@ petgraph = { version = "0.6", features = ["serde-1"] }
 tracing = "0.1"
 tracing-wasm = "0.2"
 
+# Testing and Benchmarking
+criterion = { version = "0.5", features = ["html_reports"] }
+
 [dependencies.bevy_rapier3d]
 version = "0.27"
 features = ["serde-serialize"]
@@ -76,3 +79,7 @@ overflow-checks = true
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = ["-O4", "--enable-reference-types", "--enable-bulk-memory"]
+
+[[bench]]
+name = "performance_benchmarks"
+harness = false

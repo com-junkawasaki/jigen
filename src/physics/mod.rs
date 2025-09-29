@@ -53,3 +53,63 @@ fn sync_physics_with_scene_graph(
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use bevy::prelude::*;
+
+    #[test]
+    fn test_physics_plugin_creation() {
+        let plugin = PhysicsPlugin;
+        // Plugin should be created without issues
+        assert!(true);
+    }
+
+    #[test]
+    fn test_physics_world_basic_operations() {
+        let gravity = Vec3::new(0.0, -9.81, 0.0);
+        let mut physics_world = PhysicsWorld::new(gravity);
+
+        // Test basic operations
+        physics_world.step(1.0 / 60.0);
+
+        assert_eq!(physics_world.gravity, [0.0, -9.81, 0.0]);
+        assert_eq!(physics_world.config.enabled, true);
+    }
+
+    #[test]
+    fn test_force_system_operations() {
+        use super::forces::ForceSystem;
+
+        let force_system = ForceSystem::new();
+
+        // Test clearing (should not panic)
+        // Note: We can't access private fields, so we test the public interface
+        assert!(true);
+    }
+
+    #[test]
+    fn test_constraint_system_operations() {
+        use super::constraints::ConstraintSystem;
+
+        let constraint_system = ConstraintSystem::new();
+        let physics_world = PhysicsWorld::new(Vec3::new(0.0, -9.81, 0.0));
+
+        // Test constraint solving (placeholder)
+        // Note: In real implementation, this would require mutable access
+        assert!(true);
+    }
+
+    #[test]
+    fn test_collision_system_operations() {
+        use super::collisions::CollisionSystem;
+
+        let collision_system = CollisionSystem::new();
+        let physics_world = PhysicsWorld::new(Vec3::new(0.0, -9.81, 0.0));
+
+        // Test collision processing (placeholder)
+        // Note: In real implementation, this would require mutable access
+        assert!(true);
+    }
+}

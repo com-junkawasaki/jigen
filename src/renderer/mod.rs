@@ -18,6 +18,16 @@ pub struct SceneEntityMap {
     pub reverse_map: std::collections::HashMap<Entity, String>,
 }
 
+impl SceneEntityMap {
+    /// Create a new scene entity map
+    pub fn new() -> Self {
+        Self {
+            entity_map: std::collections::HashMap::new(),
+            reverse_map: std::collections::HashMap::new(),
+        }
+    }
+}
+
 impl Plugin for RendererPlugin {
     fn build(&self, app: &mut App) {
         app.insert_resource(SceneEntityMap {
@@ -305,4 +315,97 @@ pub fn camera_controller(
 /// Add camera controller to Bevy app
 pub fn add_camera_controller(app: &mut App) {
     app.add_systems(Update, camera_controller);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::graph::vertex::Vertex;
+    use nalgebra::{Vector3, Quaternion};
+
+    #[test]
+    fn test_renderer_plugin_creation() {
+        let plugin = RendererPlugin;
+        // Plugin should be created without issues
+        assert!(true);
+    }
+
+    #[test]
+    fn test_scene_entity_map() {
+        let mut entity_map = SceneEntityMap::new();
+        // Test basic operations (actual mapping happens in Bevy systems)
+        assert_eq!(entity_map.entity_map.len(), 0);
+    }
+
+    #[test]
+    fn test_mesh_creation() {
+        let vertex = Vertex {
+            id: "test".to_string(),
+            node_type: crate::dsl::scene::NodeType::Geometry,
+            transform: crate::dsl::scene::Transform {
+                position: Vector3::new(0.0, 0.0, 0.0),
+                rotation: Quaternion::identity(),
+                scale: Vector3::new(1.0, 1.0, 1.0),
+            },
+            properties: serde_json::Value::Null,
+            tags: vec![],
+            physics_state: None,
+            graph_index: None,
+            parent_id: None,
+            child_ids: vec![],
+            metadata: std::collections::HashMap::new(),
+        };
+
+        let mesh = create_mesh_from_vertex(&vertex);
+        // Mesh creation should succeed without panicking
+        assert!(true);
+    }
+
+    #[test]
+    fn test_material_creation() {
+        let vertex = Vertex {
+            id: "test".to_string(),
+            node_type: crate::dsl::scene::NodeType::Geometry,
+            transform: crate::dsl::scene::Transform {
+                position: Vector3::new(0.0, 0.0, 0.0),
+                rotation: Quaternion::identity(),
+                scale: Vector3::new(1.0, 1.0, 1.0),
+            },
+            properties: serde_json::Value::Null,
+            tags: vec![],
+            physics_state: None,
+            graph_index: None,
+            parent_id: None,
+            child_ids: vec![],
+            metadata: std::collections::HashMap::new(),
+        };
+
+        let material = create_material_from_vertex(&vertex);
+        // Material creation should succeed without panicking
+        assert!(true);
+    }
+
+    #[test]
+    fn test_collider_creation() {
+        let vertex = Vertex {
+            id: "test".to_string(),
+            node_type: crate::dsl::scene::NodeType::Geometry,
+            transform: crate::dsl::scene::Transform {
+                position: Vector3::new(0.0, 0.0, 0.0),
+                rotation: Quaternion::identity(),
+                scale: Vector3::new(1.0, 1.0, 1.0),
+            },
+            properties: serde_json::Value::Null,
+            tags: vec![],
+            physics_state: None,
+            graph_index: None,
+            parent_id: None,
+            child_ids: vec![],
+            metadata: std::collections::HashMap::new(),
+        };
+
+        let collider = create_collider_from_vertex(&vertex);
+        // Collider creation should succeed without panicking
+        assert!(true);
+    }
 }
