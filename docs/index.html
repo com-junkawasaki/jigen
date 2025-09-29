@@ -46,16 +46,30 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 Jigen Performance Dashboard</h1>
+    <div class="container max-w-2xl mx-auto px-4">
+        <h1 class="text-2xl sm:text-4xl font-bold mb-4">🚀 Jigen Performance Dashboard</h1>
         <div class="spinner"></div>
-        <div class="status">Building dashboard...</div>
-        <p>This page will be automatically replaced with the full performance dashboard once the build completes.</p>
+        <div class="status text-lg sm:text-xl">Building dashboard...</div>
+        <p class="text-gray-300 text-sm sm:text-base mt-4">
+            This page will be automatically replaced with the full performance dashboard once the build completes.
+        </p>
 
-        <div class="info">
-            <p><strong>Status:</strong> GitHub Actions is building the dashboard</p>
-            <p><strong>Next:</strong> Check back in a few minutes after the build completes</p>
-            <p><strong>Manual Build:</strong> Run <code>make dashboard-gh-pages</code> locally</p>
+        <div class="info mt-8 space-y-2 text-sm sm:text-base">
+            <p><strong>📊 Status:</strong> GitHub Actions is building the dashboard</p>
+            <p><strong>⏱️ Next:</strong> Check back in a few minutes after the build completes</p>
+            <p><strong>🔧 Manual Build:</strong> Run <code class="bg-gray-700 px-1 rounded">make dashboard-gh-pages</code> locally</p>
+            <p><strong>📱 Mobile:</strong> Fully responsive design optimized for all devices</p>
+        </div>
+
+        <div class="mt-8 p-4 bg-gray-800 rounded-lg">
+            <h2 class="text-lg font-semibold mb-2">Features</h2>
+            <ul class="text-sm space-y-1 text-gray-300">
+                <li>• 📈 Real-time performance charts and metrics</li>
+                <li>• 🔥 Interactive flame graphs for profiling</li>
+                <li>• 🎯 Benchmark summaries and trend analysis</li>
+                <li>• 📱 Mobile-optimized responsive design</li>
+                <li>• 🔬 Detailed trace analysis and memory monitoring</li>
+            </ul>
         </div>
     </div>
 </body>

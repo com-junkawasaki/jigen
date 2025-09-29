@@ -16,27 +16,45 @@ const { title } = Astro.props;
     <title>{title}</title>
   </head>
   <body class="bg-gray-900 text-white min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-      <header class="mb-8">
-        <h1 class="text-4xl font-bold text-center mb-2">🚀 Jigen Performance Dashboard</h1>
-        <p class="text-gray-400 text-center">Real-time performance monitoring and analysis</p>
+    <div class="container mx-auto px-4 py-4 sm:py-8">
+      <header class="mb-6 sm:mb-8">
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-2">🚀 Jigen Performance Dashboard</h1>
+        <p class="text-gray-400 text-center text-sm sm:text-base px-4">Real-time performance monitoring and analysis</p>
 
-        <nav class="flex justify-center mt-6">
-          <div class="bg-gray-800 rounded-lg p-1">
-            <a href="/" class="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-700 data-[active]:bg-blue-600 data-[active]:text-white">
-              📊 Dashboard
-            </a>
-            <a href="/profiling" class="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-700 data-[active]:bg-blue-600 data-[active]:text-white ml-1">
-              🔬 Profiling
-            </a>
+        <!-- Mobile-first navigation -->
+        <nav class="flex justify-center mt-4 sm:mt-6">
+          <div class="bg-gray-800 rounded-lg p-1 w-full max-w-xs sm:max-w-none">
+            <div class="grid grid-cols-2 gap-1">
+              <a
+                href="/"
+                class="px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium text-center transition-colors hover:bg-gray-700 data-[active]:bg-blue-600 data-[active]:text-white"
+                data-active={Astro.url.pathname === '/' ? true : undefined}
+              >
+                📊 Dashboard
+              </a>
+              <a
+                href="/profiling"
+                class="px-2 sm:px-4 py-2 rounded-md text-xs sm:text-sm font-medium text-center transition-colors hover:bg-gray-700 data-[active]:bg-blue-600 data-[active]:text-white"
+                data-active={Astro.url.pathname === '/profiling' ? true : undefined}
+              >
+                🔬 Profiling
+              </a>
+            </div>
           </div>
         </nav>
       </header>
 
       <slot />
 
-      <footer class="mt-16 text-center text-gray-500">
-        <p>Built with <a href="https://astro.build" class="text-blue-400 hover:text-blue-300">Astro</a></p>
+      <footer class="mt-8 sm:mt-16 text-center text-gray-500 px-4">
+        <p class="text-sm sm:text-base">
+          Built with <a href="https://astro.build" class="text-blue-400 hover:text-blue-300 transition-colors">Astro</a>
+          <span class="mx-2">•</span>
+          <a href="https://github.com/junkawasaki/jigen" class="text-blue-400 hover:text-blue-300 transition-colors">View Source</a>
+        </p>
+        <p class="text-xs text-gray-600 mt-2">
+          Jigen Performance Dashboard - Real-time monitoring and analysis
+        </p>
       </footer>
     </div>
   </body>

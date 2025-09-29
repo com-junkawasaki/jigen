@@ -44,29 +44,29 @@ export default function BenchmarkSummary({ data }: BenchmarkSummaryProps) {
 
   return (
     <div class="space-y-4">
-      <div class="grid grid-cols-2 gap-4">
-        <div class="text-center">
-          <div class="text-2xl font-bold text-blue-400">{summary.totalBenchmarks}</div>
-          <div class="text-sm text-gray-400">Total Benchmarks</div>
+      <div class="grid grid-cols-2 gap-3 sm:gap-4">
+        <div class="text-center p-3 bg-gray-700 rounded-lg">
+          <div class="text-xl sm:text-2xl font-bold text-blue-400">{summary.totalBenchmarks}</div>
+          <div class="text-xs sm:text-sm text-gray-400">Total Benchmarks</div>
         </div>
-        <div class="text-center">
-          <div class="text-2xl font-bold text-green-400">{summary.averageTime.toFixed(2)}ms</div>
-          <div class="text-sm text-gray-400">Average Time</div>
+        <div class="text-center p-3 bg-gray-700 rounded-lg">
+          <div class="text-xl sm:text-2xl font-bold text-green-400">{summary.averageTime.toFixed(2)}ms</div>
+          <div class="text-xs sm:text-sm text-gray-400">Average Time</div>
         </div>
       </div>
 
       <div class="space-y-2">
-        <div class="flex justify-between">
-          <span class="text-gray-400">Best Performance:</span>
-          <span class="text-green-400 font-mono">{summary.bestPerformance}</span>
+        <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+          <span class="text-gray-400 text-sm">Best Performance:</span>
+          <span class="text-green-400 font-mono text-sm">{summary.bestPerformance}</span>
         </div>
-        <div class="flex justify-between">
-          <span class="text-gray-400">Worst Performance:</span>
-          <span class="text-red-400 font-mono">{summary.worstPerformance}</span>
+        <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+          <span class="text-gray-400 text-sm">Worst Performance:</span>
+          <span class="text-red-400 font-mono text-sm">{summary.worstPerformance}</span>
         </div>
-        <div class="flex justify-between">
-          <span class="text-gray-400">Performance Trend:</span>
-          <span class={`font-mono ${
+        <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+          <span class="text-gray-400 text-sm">Performance Trend:</span>
+          <span class={`font-mono text-sm ${
             summary.trend === 'improving' ? 'text-green-400' :
             summary.trend === 'degrading' ? 'text-red-400' :
             'text-yellow-400'
@@ -77,19 +77,19 @@ export default function BenchmarkSummary({ data }: BenchmarkSummaryProps) {
       </div>
 
       <div class="mt-4">
-        <h4 class="text-lg font-semibold mb-2">Benchmark Categories</h4>
+        <h4 class="text-base sm:text-lg font-semibold mb-2">Benchmark Categories</h4>
         <div class="space-y-1">
-          <div class="flex justify-between text-sm">
+          <div class="flex flex-col sm:flex-row sm:justify-between gap-1 text-sm">
             <span>Scene Parsing</span>
-            <span class="text-blue-400">{data.sceneParsing.data.length} tests</span>
+            <span class="text-blue-400 font-mono">{data.sceneParsing.data.length} tests</span>
           </div>
-          <div class="flex justify-between text-sm">
+          <div class="flex flex-col sm:flex-row sm:justify-between gap-1 text-sm">
             <span>SceneGraph Loading</span>
-            <span class="text-green-400">{data.sceneGraph.data.length} tests</span>
+            <span class="text-green-400 font-mono">{data.sceneGraph.data.length} tests</span>
           </div>
-          <div class="flex justify-between text-sm">
+          <div class="flex flex-col sm:flex-row sm:justify-between gap-1 text-sm">
             <span>Physics Simulation</span>
-            <span class="text-purple-400">{data.physics.data.length} tests</span>
+            <span class="text-purple-400 font-mono">{data.physics.data.length} tests</span>
           </div>
         </div>
       </div>

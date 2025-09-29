@@ -10,59 +10,59 @@ const systemInfo = {
 };
 ---
 
-<div class="bg-gray-800 rounded-lg p-6 shadow-lg">
-  <h3 class="text-xl font-bold mb-4 text-orange-400">🖥️ System Information</h3>
+<div class="bg-gray-800 rounded-lg p-4 sm:p-6 shadow-lg">
+  <h3 class="text-lg sm:text-xl font-bold mb-4 text-orange-400">🖥️ System Information</h3>
 
-  <div class="space-y-3">
-    <div class="flex justify-between">
-      <span class="text-gray-400">Rust Version:</span>
-      <span class="font-mono text-green-400">{systemInfo.rustVersion}</span>
+  <div class="space-y-2 sm:space-y-3">
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+      <span class="text-gray-400 text-sm">Rust Version:</span>
+      <span class="font-mono text-green-400 text-sm">{systemInfo.rustVersion}</span>
     </div>
 
-    <div class="flex justify-between">
-      <span class="text-gray-400">Bevy Version:</span>
-      <span class="font-mono text-blue-400">{systemInfo.bevyVersion}</span>
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+      <span class="text-gray-400 text-sm">Bevy Version:</span>
+      <span class="font-mono text-blue-400 text-sm">{systemInfo.bevyVersion}</span>
     </div>
 
-    <div class="flex justify-between">
-      <span class="text-gray-400">Rapier Version:</span>
-      <span class="font-mono text-purple-400">{systemInfo.rapierVersion}</span>
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+      <span class="text-gray-400 text-sm">Rapier Version:</span>
+      <span class="font-mono text-purple-400 text-sm">{systemInfo.rapierVersion}</span>
     </div>
 
-    <div class="flex justify-between">
-      <span class="text-gray-400">Platform:</span>
-      <span class="font-mono text-yellow-400">{systemInfo.platform}</span>
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+      <span class="text-gray-400 text-sm">Platform:</span>
+      <span class="font-mono text-yellow-400 text-sm">{systemInfo.platform}</span>
     </div>
 
-    <div class="flex justify-between">
-      <span class="text-gray-400">Last Updated:</span>
-      <span class="font-mono text-cyan-400">{systemInfo.lastUpdated}</span>
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+      <span class="text-gray-400 text-sm">Last Updated:</span>
+      <span class="font-mono text-cyan-400 text-sm">{systemInfo.lastUpdated}</span>
     </div>
 
-    <div class="flex justify-between">
-      <span class="text-gray-400">Build Status:</span>
-      <span class="font-mono">{systemInfo.buildStatus}</span>
+    <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+      <span class="text-gray-400 text-sm">Build Status:</span>
+      <span class="font-mono text-sm">{systemInfo.buildStatus}</span>
     </div>
   </div>
 
-  <div class="mt-6">
-    <h4 class="text-lg font-semibold mb-2">Performance Targets</h4>
-    <div class="space-y-1 text-sm">
-      <div class="flex justify-between">
+  <div class="mt-4 sm:mt-6">
+    <h4 class="text-base sm:text-lg font-semibold mb-2">Performance Targets</h4>
+    <div class="space-y-1 text-xs sm:text-sm">
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
         <span>Scene Parsing (500 nodes):</span>
-        <span class="text-green-400">≤ 5ms</span>
+        <span class="text-green-400 font-mono">≤ 5ms</span>
       </div>
-      <div class="flex justify-between">
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
         <span>SceneGraph Loading (500 nodes):</span>
-        <span class="text-green-400">≤ 3ms</span>
+        <span class="text-green-400 font-mono">≤ 3ms</span>
       </div>
-      <div class="flex justify-between">
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
         <span>Physics Simulation (100 steps):</span>
-        <span class="text-green-400">≤ 1ms</span>
+        <span class="text-green-400 font-mono">≤ 1ms</span>
       </div>
-      <div class="flex justify-between">
+      <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
         <span>Memory Usage:</span>
-        <span class="text-green-400">≤ 50MB</span>
+        <span class="text-green-400 font-mono">≤ 50MB</span>
       </div>
     </div>
   </div>

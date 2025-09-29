@@ -36,10 +36,17 @@ export default function PerformanceCharts({ sceneParsing, sceneGraph, physics }:
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,
-            text: 'Scene Parsing Performance'
+            text: 'Scene Parsing Performance',
+            font: {
+              size: window.innerWidth < 640 ? 12 : 14
+            }
+          },
+          legend: {
+            display: window.innerWidth < 640 ? false : true
           }
         },
         scales: {
@@ -47,13 +54,29 @@ export default function PerformanceCharts({ sceneParsing, sceneGraph, physics }:
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Time (ms)'
+              text: 'Time (ms)',
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
+            },
+            ticks: {
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Node Count'
+              text: 'Node Count',
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
+            },
+            ticks: {
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
             }
           }
         }
@@ -75,10 +98,17 @@ export default function PerformanceCharts({ sceneParsing, sceneGraph, physics }:
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,
-            text: 'SceneGraph Loading Performance'
+            text: 'SceneGraph Loading Performance',
+            font: {
+              size: window.innerWidth < 640 ? 12 : 14
+            }
+          },
+          legend: {
+            display: window.innerWidth < 640 ? false : true
           }
         },
         scales: {
@@ -86,13 +116,29 @@ export default function PerformanceCharts({ sceneParsing, sceneGraph, physics }:
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Time (ms)'
+              text: 'Time (ms)',
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
+            },
+            ticks: {
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Node Count'
+              text: 'Node Count',
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
+            },
+            ticks: {
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
             }
           }
         }
@@ -115,10 +161,17 @@ export default function PerformanceCharts({ sceneParsing, sceneGraph, physics }:
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,
-            text: 'Physics Simulation Performance'
+            text: 'Physics Simulation Performance',
+            font: {
+              size: window.innerWidth < 640 ? 12 : 14
+            }
+          },
+          legend: {
+            display: window.innerWidth < 640 ? false : true
           }
         },
         scales: {
@@ -126,13 +179,29 @@ export default function PerformanceCharts({ sceneParsing, sceneGraph, physics }:
             beginAtZero: true,
             title: {
               display: true,
-              text: 'Time (ms)'
+              text: 'Time (ms)',
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
+            },
+            ticks: {
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
             }
           },
           x: {
             title: {
               display: true,
-              text: 'Steps'
+              text: 'Steps',
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
+            },
+            ticks: {
+              font: {
+                size: window.innerWidth < 640 ? 10 : 12
+              }
             }
           }
         }
@@ -147,15 +216,15 @@ export default function PerformanceCharts({ sceneParsing, sceneGraph, physics }:
   }, [sceneParsing, sceneGraph, physics]);
 
   return (
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div class="bg-gray-700 rounded p-4">
-        <canvas ref={sceneParsingRef}></canvas>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div class="bg-gray-700 rounded p-3 sm:p-4 min-h-[300px] sm:min-h-[350px]">
+        <canvas ref={sceneParsingRef} class="w-full h-full"></canvas>
       </div>
-      <div class="bg-gray-700 rounded p-4">
-        <canvas ref={sceneGraphRef}></canvas>
+      <div class="bg-gray-700 rounded p-3 sm:p-4 min-h-[300px] sm:min-h-[350px]">
+        <canvas ref={sceneGraphRef} class="w-full h-full"></canvas>
       </div>
-      <div class="bg-gray-700 rounded p-4">
-        <canvas ref={physicsRef}></canvas>
+      <div class="bg-gray-700 rounded p-3 sm:p-4 min-h-[300px] sm:min-h-[350px] sm:col-span-2 lg:col-span-1">
+        <canvas ref={physicsRef} class="w-full h-full"></canvas>
       </div>
     </div>
   );
