@@ -25,7 +25,15 @@ impl Plugin for PhysicsPlugin {
             .add_plugins(RapierDebugRenderPlugin::default())
             .insert_resource(RapierConfiguration {
                 gravity: Vec3::new(0.0, -9.81, 0.0),
-                ..Default::default()
+                physics_pipeline_active: true,
+                query_pipeline_active: true,
+                timestep_mode: bevy_rapier3d::plugin::TimestepMode::Variable {
+                    max_dt: 1.0 / 60.0,
+                    time_scale: 1.0,
+                    substeps: 1,
+                },
+                force_update_from_transform_changes: false,
+                scaled_shape_subdivision: 10,
             })
             .add_systems(Update, sync_physics_with_scene_graph);
     }

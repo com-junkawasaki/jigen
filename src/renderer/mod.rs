@@ -259,16 +259,16 @@ pub fn camera_controller(
         let mut velocity = Vec3::ZERO;
 
         if keys.pressed(KeyCode::KeyW) || keys.pressed(KeyCode::ArrowUp) {
-            velocity += transform.forward();
+            velocity += *transform.forward();
         }
         if keys.pressed(KeyCode::KeyS) || keys.pressed(KeyCode::ArrowDown) {
-            velocity += transform.back();
+            velocity += *transform.back();
         }
         if keys.pressed(KeyCode::KeyA) || keys.pressed(KeyCode::ArrowLeft) {
-            velocity += transform.left();
+            velocity += *transform.left();
         }
         if keys.pressed(KeyCode::KeyD) || keys.pressed(KeyCode::ArrowRight) {
-            velocity += transform.right();
+            velocity += *transform.right();
         }
         if keys.pressed(KeyCode::KeyQ) {
             velocity += Vec3::Y;

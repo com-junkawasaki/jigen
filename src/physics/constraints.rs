@@ -35,3 +35,4 @@ impl ConstraintSystem {
     pub fn clear(&mut self) {
         self._constraints.clear();
     }
+}

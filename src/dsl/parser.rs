@@ -335,7 +335,7 @@ pub fn create_minimal_scene() -> SceneDefinition {
             shadows: true,
             physics: PhysicsConfig {
                 enabled: true,
-                gravity: nalgebra::Vector3::new(0.0, -9.81, 0.0),
+                gravity: [0.0, -9.81, 0.0],
                 time_step: 1.0 / 60.0,
                 max_substeps: 10,
             },

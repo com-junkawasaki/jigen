@@ -385,7 +385,7 @@ pub struct PhysicsConfig {
     pub enabled: bool,
 
     /// Gravity vector
-    pub gravity: Vector3<f32>,
+    pub gravity: [f32; 3],
 
     /// Time step for physics simulation
     pub time_step: f32,
@@ -410,7 +410,7 @@ impl Default for SceneDefinition {
                 shadows: true,
                 physics: PhysicsConfig {
                     enabled: true,
-                    gravity: Vector3::new(0.0, -9.81, 0.0),
+                    gravity: [0.0, -9.81, 0.0],
                     time_step: 1.0 / 60.0,
                     max_substeps: 10,
                 },

@@ -8,7 +8,7 @@ use bevy_rapier3d::prelude::*;
 /// Physics world managing simulation state via Bevy Rapier3D
 pub struct PhysicsWorld {
     /// Gravity vector
-    pub gravity: Vec3,
+    pub gravity: [f32; 3],
 
     /// Configuration
     pub config: crate::dsl::scene::PhysicsConfig,
@@ -39,8 +39,9 @@ impl PhysicsWorld {
     /// Create physics world with custom configuration
     pub fn with_config(config: crate::dsl::scene::PhysicsConfig) -> Self {
         Self {
-            gravity: Vec3::new(config.gravity[0], config.gravity[1], config.gravity[2]),
+            gravity: config.gravity,
             config,
+            force_generators: Vec::new(),
         }
     }
 
@@ -117,7 +118,7 @@ pub struct PhysicsStatistics {
     pub joint_count: usize,
     pub island_count: usize,
     pub time_accumulator: f32,
-    pub gravity: Vec3,
+    pub gravity: [f32; 3],
 }
 
 // Bevy Rapier3D handles events through Bevy's event system

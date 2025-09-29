@@ -35,7 +35,7 @@ pub struct Edge {
 }
 
 /// Types of relationships between vertices
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum EdgeType {
     /// Hierarchical parent-child relationship
     ParentChild,
@@ -137,7 +137,7 @@ pub enum ConstraintType {
 }
 
 /// Force types
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ForceType {
     /// Gravitational attraction
     Gravity,
@@ -184,14 +184,16 @@ pub enum VisualType {
 impl Edge {
     /// Create a new edge
     pub fn new(source_id: String, target_id: String, edge_type: EdgeType) -> Self {
+        let properties = Self::default_properties(&edge_type);
+        let bidirectional = Self::default_bidirectional(&edge_type);
         Self {
             source_id,
             target_id,
             edge_type,
-            properties: Self::default_properties(&edge_type),
+            properties,
             graph_index: None,
             weight: 1.0,
-            bidirectional: Self::default_bidirectional(&edge_type),
+            bidirectional,
             metadata: HashMap::new(),
         }
     }
@@ -234,6 +236,7 @@ impl Edge {
         range: f32,
         falloff: FalloffType,
     ) -> Self {
+        let bidirectional = Self::is_force_bidirectional(&force_type);
         Self {
             source_id,
             target_id,
@@ -247,7 +250,7 @@ impl Edge {
             },
             graph_index: None,
             weight: magnitude,
-            bidirectional: Self::is_force_bidirectional(&force_type),
+            bidirectional,
             metadata: HashMap::new(),
         }
     }

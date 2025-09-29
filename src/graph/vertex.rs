@@ -110,10 +110,12 @@ impl Vertex {
         self.transform = new_transform;
 
         // Update bounding box if physics state exists
-        if let Some(physics) = &mut self.physics_state {
+        if let Some(mut physics) = self.physics_state.take() {
             // Recalculate bounding box based on new transform
             // This is a simplified calculation - in practice you'd need geometry info
-            physics.bounding_box = self.calculate_transformed_bbox(&physics.bounding_box);
+            let current_bbox = physics.bounding_box.clone();
+            physics.bounding_box = self.calculate_transformed_bbox(&current_bbox);
+            self.physics_state = Some(physics);
         }
     }
 
@@ -126,7 +128,7 @@ impl Vertex {
 
     /// Update physics state
     pub fn update_physics(&mut self, delta_time: f32) {
-        if let Some(physics) = &mut self.physics_state {
+        if let Some(mut physics) = self.physics_state.take() {
             if physics.mass > 0.0 && !physics.is_kinematic {
                 // Calculate total force
                 let total_force: Vector3<f32> = physics.forces.iter().sum();
@@ -142,9 +144,11 @@ impl Vertex {
 
                 // Integrate angular velocity (simplified - no torque calculation)
                 // In a full implementation, you'd calculate torque from forces and moments of inertia
+                let current_rotation = self.transform.rotation.clone();
+                let current_angular_velocity = physics.angular_velocity.clone();
                 self.transform.rotation = self.integrate_angular_velocity(
-                    &self.transform.rotation,
-                    &physics.angular_velocity,
+                    &current_rotation,
+                    &current_angular_velocity,
                     delta_time
                 );
 
@@ -152,8 +156,10 @@ impl Vertex {
                 physics.forces.clear();
 
                 // Update bounding box
-                physics.bounding_box = self.calculate_transformed_bbox(&physics.bounding_box);
+                let current_bbox = physics.bounding_box.clone();
+                physics.bounding_box = self.calculate_transformed_bbox(&current_bbox);
             }
+            self.physics_state = Some(physics);
         }
     }
 

@@ -35,3 +35,4 @@ impl CollisionSystem {
     pub fn clear(&mut self) {
         self._collisions.clear();
     }
+}

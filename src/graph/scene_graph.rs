@@ -128,10 +128,12 @@ impl SceneGraph {
             let child_indices = self.build_hierarchy(&node.children, Some(node.id.clone()));
 
             // Update vertex children
+            let child_vertex_ids: Vec<String> = child_indices.iter()
+                .filter_map(|&idx| self.graph.node_weight(idx).map(|v| v.id.clone()))
+                .collect();
+
             if let Some(vertex_data) = self.graph.node_weight_mut(node_index) {
-                vertex_data.child_ids = child_indices.iter()
-                    .filter_map(|&idx| self.graph.node_weight(idx).map(|v| v.id.clone()))
-                    .collect();
+                vertex_data.child_ids = child_vertex_ids;
             }
 
             node_indices.push(node_index);
@@ -148,20 +150,19 @@ impl SceneGraph {
             for &j in &vertices {
                 if i == j { continue; }
 
-                let vertex_i = &self.graph[i];
-                let vertex_j = &self.graph[j];
-
-                // Calculate distance
-                let pos_i = vertex_i.transform.position;
-                let pos_j = vertex_j.transform.position;
+                // Get vertex data first
+                let vertex_i_id = self.graph[i].id.clone();
+                let vertex_j_id = self.graph[j].id.clone();
+                let pos_i = self.graph[i].transform.position;
+                let pos_j = self.graph[j].transform.position;
                 let distance = (pos_i - pos_j).magnitude();
 
                 // Create spatial edge if close enough (arbitrary threshold)
                 if distance < 50.0 {
                     let direction = (pos_j - pos_i).normalize();
                     let edge = Edge::spatial(
-                        vertex_i.id.clone(),
-                        vertex_j.id.clone(),
+                        vertex_i_id.clone(),
+                        vertex_j_id.clone(),
                         distance,
                         [direction.x, direction.y, direction.z],
                     );
@@ -169,8 +170,8 @@ impl SceneGraph {
                     let edge_index = self.graph.add_edge(i, j, edge);
 
                     let edge_key = (
-                        vertex_i.id.clone(),
-                        vertex_j.id.clone(),
+                        vertex_i_id,
+                        vertex_j_id,
                         "Spatial".to_string()
                     );
                     self.edge_lookup.insert(edge_key, edge_index);
@@ -223,19 +224,21 @@ impl SceneGraph {
         for target_index in self.graph.node_indices() {
             if source_index == target_index { continue; }
 
-            let source_vertex = &self.graph[source_index];
-            let target_vertex = &self.graph[target_index];
+            // Get vertex data first
+            let source_vertex_id = self.graph[source_index].id.clone();
+            let target_vertex_id = self.graph[target_index].id.clone();
+            let target_physics_state = &self.graph[target_index].physics_state;
 
             // Skip if target is not dynamic
-            if target_vertex.physics_state.as_ref()
-                .map_or(true, |p| !matches!(p.is_kinematic, false)) {
+            if target_physics_state.as_ref()
+                .map_or(true, |p| p.is_kinematic) {
                 continue;
             }
 
             let direction = [force.vector.x, force.vector.y, force.vector.z];
             let edge = Edge::force(
-                source_vertex.id.clone(),
-                target_vertex.id.clone(),
+                source_vertex_id.clone(),
+                target_vertex_id.clone(),
                 super::edge::ForceType::Gravity,
                 force.magnitude.unwrap_or(force.vector.magnitude()),
                 direction,
@@ -246,8 +249,8 @@ impl SceneGraph {
             let edge_index = self.graph.add_edge(source_index, target_index, edge);
 
             let edge_key = (
-                source_vertex.id.clone(),
-                target_vertex.id.clone(),
+                source_vertex_id,
+                target_vertex_id,
                 "Force".to_string()
             );
             self.edge_lookup.insert(edge_key, edge_index);
