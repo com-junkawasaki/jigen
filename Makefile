@@ -28,6 +28,14 @@ dashboard:
 	mkdir -p docs
 	cp -r apps/doc/dist/* docs/
 
+# Build documentation dashboard for GitHub Pages
+dashboard-gh-pages:
+	cd apps/doc && npm run build:gh-pages
+	mkdir -p docs
+	cp -r apps/doc/dist/* docs/
+	# Prepare docs/ directory for GitHub Pages
+	./scripts/prepare-gh-pages.sh
+
 # Serve documentation dashboard locally
 serve-dashboard:
 	cd apps/doc && npm run dev
@@ -54,14 +62,15 @@ help:
 	@echo "Jigen Build System"
 	@echo ""
 	@echo "Available targets:"
-	@echo "  all             - Build and test everything"
-	@echo "  build           - Build the Rust project"
-	@echo "  test            - Run all tests"
-	@echo "  bench           - Run performance benchmarks"
-	@echo "  dashboard       - Build documentation dashboard"
-	@echo "  serve-dashboard - Serve dashboard locally for development"
-	@echo "  ci              - Run full CI pipeline (test + bench + dashboard)"
-	@echo "  perf            - Run performance analysis (bench + dashboard)"
-	@echo "  dev             - Run tests in watch mode during development"
-	@echo "  clean           - Clean all build artifacts"
-	@echo "  help            - Show this help message"
+	@echo "  all               - Build and test everything"
+	@echo "  build             - Build the Rust project"
+	@echo "  test              - Run all tests"
+	@echo "  bench             - Run performance benchmarks"
+	@echo "  dashboard         - Build documentation dashboard"
+	@echo "  dashboard-gh-pages- Build dashboard for GitHub Pages deployment"
+	@echo "  serve-dashboard   - Serve dashboard locally for development"
+	@echo "  ci                - Run full CI pipeline (test + bench + dashboard)"
+	@echo "  perf              - Run performance analysis (bench + dashboard)"
+	@echo "  dev               - Run tests in watch mode during development"
+	@echo "  clean             - Clean all build artifacts"
+	@echo "  help              - Show this help message"

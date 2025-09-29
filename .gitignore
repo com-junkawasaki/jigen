@@ -3,11 +3,16 @@ target/
 # Node.js / Astro.js (for apps/doc)
 node_modules/
 dist/
+apps/doc/dist/
 .astro/
 .env
 .env.local
 .env.production
 .env.development
+
+# Keep docs/ folder for GitHub Pages (but ignore build artifacts)
+docs/*.log
+docs/.astro/
 
 # OS generated files
 .DS_Store

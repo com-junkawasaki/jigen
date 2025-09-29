@@ -282,7 +282,9 @@ npm run build  # Production build
 
 ### Accessing the Dashboard
 
-Once built, the dashboard is available at `docs/index.html` or served locally via `npm run dev`.
+- **Local Development**: Run `make serve-dashboard` or `cd apps/doc && npm run dev`
+- **Built Version**: Available at `docs/index.html` after running `make dashboard`
+- **GitHub Pages**: Automatically deployed at https://[username].github.io/[repository-name]/
 
 #### Pages
 
@@ -313,6 +315,56 @@ Profiling data includes:
 - Memory usage per operation
 - Thread utilization analysis
 - Flame graphs for performance bottlenecks
+
+### GitHub Pages Deployment
+
+The performance dashboard is automatically deployed to GitHub Pages on every push to the main branch.
+
+#### Setup Instructions
+
+1. **Enable GitHub Pages** in your repository settings:
+   - Go to **Settings** → **Pages**
+   - Set **Source** to **"GitHub Actions"**
+   - The workflow will automatically build and deploy the dashboard
+
+2. **Repository Settings**:
+   - The `docs/` folder will be used as the GitHub Pages source
+   - Access your dashboard at: `https://[username].github.io/[repository-name]/`
+
+3. **First Deployment**:
+   - Push these changes to the `main` branch
+   - GitHub Actions will automatically build and deploy the dashboard
+   - The first deployment may take 2-3 minutes
+
+4. **Custom Domain** (optional):
+   - Create a `docs/CNAME` file with your custom domain
+   - Configure DNS settings to point to GitHub Pages
+
+#### Manual Deployment
+
+```bash
+# Build for GitHub Pages
+make dashboard-gh-pages
+
+# Preview locally
+cd docs && python -m http.server 8000
+
+# Access at http://localhost:8000
+```
+
+#### CI/CD Pipeline
+
+The deployment pipeline includes:
+
+1. **Test Phase**: Run all Rust tests and integration tests
+2. **Benchmark Phase**: Execute performance benchmarks (main branch only)
+3. **Build Phase**: Build the Astro dashboard for GitHub Pages
+4. **Deploy Phase**: Deploy to GitHub Pages
+
+#### Environment Variables
+
+- `GITHUB_PAGES=true`: Enables GitHub Pages specific build configuration
+- Base path is set to `/[repository-name]/` for proper asset loading
 
 ## License
 
