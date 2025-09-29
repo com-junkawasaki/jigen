@@ -4,7 +4,7 @@
 //! and interacting with the 3D environment.
 
 use wasm_bindgen::prelude::*;
-use crate::{dsl::SceneParser, graph::SceneGraph, physics::PhysicsWorld, renderer::SceneEntityMap};
+use crate::{dsl::SceneParser, graph::SceneGraph, renderer::SceneEntityMap};
 use bevy::prelude::*;
 use std::sync::{Arc, Mutex};
 
@@ -14,7 +14,6 @@ pub struct JigenWasmApp {
     app: App,
     scene_parser: SceneParser,
     scene_graph: Arc<Mutex<SceneGraph>>,
-    physics_world: Arc<Mutex<PhysicsWorld>>,
 }
 
 #[wasm_bindgen]
@@ -34,17 +33,14 @@ impl JigenWasmApp {
         });
 
         let scene_graph = Arc::new(Mutex::new(SceneGraph::new()));
-        let physics_world = Arc::new(Mutex::new(PhysicsWorld::new(nalgebra::Vector3::new(0.0, -9.81, 0.0))));
 
         // Insert resources
         app.insert_resource(scene_graph.clone());
-        app.insert_resource(physics_world.clone());
 
         Ok(JigenWasmApp {
             app,
             scene_parser: SceneParser::new(),
             scene_graph,
-            physics_world,
         })
     }
 
@@ -58,45 +54,6 @@ impl JigenWasmApp {
         // Load into scene graph
         if let Ok(mut sg) = self.scene_graph.lock() {
             sg.load_scene(&scene_def);
-
-            // Create physics bodies for scene nodes
-            if let Ok(mut pw) = self.physics_world.lock() {
-                for node in &scene_def.nodes {
-                    if let crate::dsl::scene::NodeProperties::Geometry(props) = &node.properties {
-                        if let Some(physics) = &props.physics {
-                            use rapier3d::prelude::*;
-
-                            // Create collider shape based on geometry
-                            let shape = match props.primitive {
-                                crate::dsl::scene::GeometryPrimitive::Box => {
-                                    ColliderBuilder::cuboid(0.5, 0.5, 0.5).build()
-                                }
-                                crate::dsl::scene::GeometryPrimitive::Sphere => {
-                                    ColliderBuilder::ball(0.5).build()
-                                }
-                                _ => ColliderBuilder::cuboid(0.5, 0.5, 0.5).build(),
-                            };
-
-                            let collider_handle = pw.add_collider(node.id.clone(), shape);
-
-                            // Create rigid body if dynamic
-                            if matches!(physics.body_type, crate::dsl::scene::PhysicsBodyType::Dynamic) {
-                                let rigid_body = RigidBodyBuilder::dynamic()
-                                    .translation(node.transform.position.x, node.transform.position.y, node.transform.position.z)
-                                    .rotation(node.transform.rotation.coords.x, node.transform.rotation.coords.y, node.transform.rotation.coords.z, node.transform.rotation.coords.w)
-                                    .build();
-
-                                let body_handle = pw.add_rigid_body(node.id.clone(), rigid_body);
-
-                                // Attach collider to body
-                                if let Some(body) = pw.rigid_body_set.get_mut(body_handle) {
-                                    body.colliders().push(collider_handle);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         Ok(())
@@ -125,70 +82,43 @@ impl JigenWasmApp {
     #[wasm_bindgen]
     pub fn get_scene_stats(&self) -> Result<String, JsValue> {
         if let Ok(sg) = self.scene_graph.lock() {
-            if let Ok(pw) = self.physics_world.lock() {
-                let stats = serde_json::json!({
-                    "scene_graph": sg.statistics(),
-                    "physics_world": pw.statistics(),
-                    "topology_version": sg.topology_version(),
-                });
-                Ok(stats.to_string())
-            } else {
-                Err(JsValue::from_str("Failed to lock physics world"))
-            }
+            let stats = serde_json::json!({
+                "scene_graph": sg.statistics(),
+                "topology_version": sg.topology_version(),
+            });
+            Ok(stats.to_string())
         } else {
             Err(JsValue::from_str("Failed to lock scene graph"))
         }
     }
 
-    /// Apply force to an object
+    /// Apply force to an object (placeholder - physics handled by Bevy Rapier3D)
     #[wasm_bindgen]
-    pub fn apply_force(&mut self, object_id: &str, force_x: f32, force_y: f32, force_z: f32) {
-        if let Ok(mut pw) = self.physics_world.lock() {
-            pw.apply_force(object_id, nalgebra::Vector3::new(force_x, force_y, force_z), None);
-        }
+    pub fn apply_force(&mut self, _object_id: &str, _force_x: f32, _force_y: f32, _force_z: f32) {
+        // Physics forces are handled by Bevy Rapier3D directly
+        // This method is a placeholder for future implementation
     }
 
-    /// Set object position
+    /// Set object position (placeholder - use Bevy Rapier3D directly)
     #[wasm_bindgen]
-    pub fn set_position(&mut self, object_id: &str, x: f32, y: f32, z: f32) {
-        if let Ok(mut pw) = self.physics_world.lock() {
-            pw.set_position(object_id, nalgebra::Vector3::new(x, y, z));
-        }
+    pub fn set_position(&mut self, _object_id: &str, _x: f32, _y: f32, _z: f32) {
+        // Position setting is handled by Bevy Rapier3D directly
+        // This method is a placeholder for future implementation
     }
 
-    /// Get object position as JSON string
+    /// Get object position as JSON string (placeholder - use Bevy Rapier3D directly)
     #[wasm_bindgen]
-    pub fn get_position(&self, object_id: &str) -> Option<String> {
-        if let Ok(pw) = self.physics_world.lock() {
-            if let Some(pos) = pw.get_position(object_id) {
-                let pos_json = serde_json::json!({
-                    "x": pos.x,
-                    "y": pos.y,
-                    "z": pos.z
-                });
-                Some(pos_json.to_string())
-            } else {
-                None
-            }
-        } else {
-            None
-        }
+    pub fn get_position(&self, _object_id: &str) -> Option<String> {
+        // Position querying is handled by Bevy Rapier3D directly
+        // This method is a placeholder for future implementation
+        None
     }
 
-    /// Add a spring constraint between two objects
+    /// Add a spring constraint between two objects (placeholder - use Bevy Rapier3D directly)
     #[wasm_bindgen]
-    pub fn add_spring(&mut self, id: &str, object_a: &str, object_b: &str, rest_length: f32, stiffness: f32) {
-        if let Ok(mut pw) = self.physics_world.lock() {
-            let _ = pw.constraint_system.add_distance_constraint(
-                id.to_string(),
-                object_a.to_string(),
-                object_b.to_string(),
-                nalgebra::Vector3::zeros(), // anchor_a
-                nalgebra::Vector3::zeros(), // anchor_b
-                rest_length,
-                stiffness,
-            );
-        }
+    pub fn add_spring(&mut self, _id: &str, _object_a: &str, _object_b: &str, _rest_length: f32, _stiffness: f32) {
+        // Joint constraints are handled by Bevy Rapier3D directly
+        // This method is a placeholder for future implementation
     }
 
     /// Export current scene as JSON string
@@ -201,20 +131,18 @@ impl JigenWasmApp {
         }
     }
 
-    /// Set gravity
+    /// Set gravity (placeholder - use Bevy Rapier3D configuration)
     #[wasm_bindgen]
-    pub fn set_gravity(&mut self, x: f32, y: f32, z: f32) {
-        if let Ok(mut pw) = self.physics_world.lock() {
-            pw.gravity = nalgebra::Vector3::new(x, y, z);
-        }
+    pub fn set_gravity(&mut self, _x: f32, _y: f32, _z: f32) {
+        // Gravity is configured via RapierConfiguration resource
+        // This method is a placeholder for future implementation
     }
 
-    /// Enable/disable physics
+    /// Enable/disable physics (placeholder - use Bevy Rapier3D configuration)
     #[wasm_bindgen]
-    pub fn set_physics_enabled(&mut self, enabled: bool) {
-        if let Ok(mut pw) = self.physics_world.lock() {
-            pw.config.enabled = enabled;
-        }
+    pub fn set_physics_enabled(&mut self, _enabled: bool) {
+        // Physics enabling/disabling is handled by RapierConfiguration
+        // This method is a placeholder for future implementation
     }
 
     /// Get vertex count in scene graph
@@ -243,9 +171,7 @@ impl JigenWasmApp {
         if let Ok(mut sg) = self.scene_graph.lock() {
             sg.clear();
         }
-        if let Ok(mut pw) = self.physics_world.lock() {
-            pw.clear();
-        }
+        // Physics world clearing is handled by Bevy Rapier3D
     }
 }
 

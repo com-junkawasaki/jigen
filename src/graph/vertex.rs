@@ -3,7 +3,7 @@
 //! Vertices represent scene nodes with their properties and state.
 
 use crate::dsl::scene::{SceneNode, NodeType, Transform};
-use nalgebra::{Vector3, Quaternion};
+use nalgebra::{Vector3, Quaternion, UnitQuaternion};
 use petgraph::graph::NodeIndex;
 use std::collections::HashMap;
 
@@ -161,8 +161,9 @@ impl Vertex {
     pub fn world_transform(&self, parent_transform: Option<&Transform>) -> Transform {
         if let Some(parent) = parent_transform {
             // Combine transforms: child_world = parent_world * child_local
+            let parent_unit_quat = UnitQuaternion::from_quaternion(parent.rotation);
             Transform {
-                position: parent.position + parent.rotation * self.transform.position,
+                position: parent.position + parent_unit_quat.transform_vector(&self.transform.position),
                 rotation: parent.rotation * self.transform.rotation,
                 scale: parent.scale.component_mul(&self.transform.scale),
             }
@@ -234,7 +235,8 @@ impl Vertex {
             .map(|corner| {
                 // Apply rotation and scale, then translate
                 let scaled = corner.component_mul(&self.transform.scale);
-                let rotated = self.transform.rotation * scaled;
+                let unit_quat = UnitQuaternion::from_quaternion(self.transform.rotation);
+                let rotated = unit_quat.transform_vector(&scaled);
                 rotated + self.transform.position
             })
             .collect();

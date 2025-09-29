@@ -300,21 +300,19 @@ impl SceneGraph {
 
         // Update spatial edges
         for edge_index in edges_to_update {
+            // First get the endpoints and vertex positions
+            let (source_idx, target_idx) = self.graph.edge_endpoints(edge_index).unwrap();
+            let source_pos = self.graph[source_idx].transform.position;
+            let target_pos = self.graph[target_idx].transform.position;
+            let distance = (source_pos - target_pos).magnitude();
+            let dir = (target_pos - source_pos).normalize();
+
+            // Then update the edge
             if let Some(edge) = self.graph.edge_weight_mut(edge_index) {
-                let (source_idx, target_idx) = self.graph.edge_endpoints(edge_index).unwrap();
-                let source_vertex = &self.graph[source_idx];
-                let target_vertex = &self.graph[target_idx];
-
-                let pos_i = source_vertex.transform.position;
-                let pos_j = target_vertex.transform.position;
-                let distance = (pos_i - pos_j).magnitude();
-
                 if let super::edge::EdgeProperties::Spatial { distance: dist, direction } = &mut edge.properties {
                     *dist = distance;
-                    let dir = (pos_j - pos_i).normalize();
                     *direction = [dir.x, dir.y, dir.z];
                 }
-
                 edge.update_weight();
             }
         }
@@ -334,14 +332,15 @@ impl SceneGraph {
         }
 
         for edge_index in edges_to_update {
+            // First get the endpoints and vertex positions
+            let (source_idx, target_idx) = self.graph.edge_endpoints(edge_index).unwrap();
+            let source_pos = self.graph[source_idx].transform.position;
+            let target_pos = self.graph[target_idx].transform.position;
+            let distance = (source_pos - target_pos).magnitude();
+
+            // Then update the edge
             if let Some(edge) = self.graph.edge_weight_mut(edge_index) {
-                let (source_idx, target_idx) = self.graph.edge_endpoints(edge_index).unwrap();
-                let source_vertex = &self.graph[source_idx];
-                let target_vertex = &self.graph[target_idx];
-
                 if let super::edge::EdgeProperties::Force { magnitude, falloff, range, .. } = &mut edge.properties {
-                    let distance = (source_vertex.transform.position - target_vertex.transform.position).magnitude();
-
                     // Apply falloff
                     let falloff_factor = match falloff {
                         super::edge::FalloffType::Constant => 1.0,

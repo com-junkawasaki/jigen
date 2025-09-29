@@ -20,7 +20,7 @@
 
 pub mod dsl;
 pub mod graph;
-// pub mod physics; // Temporarily disabled
+pub mod physics;
 pub mod renderer;
 pub mod wasm;
 
@@ -57,10 +57,10 @@ pub fn init_jigen(config: SceneConfig) -> App {
         ..default()
     }));
 
-    // Add physics plugin if enabled (temporarily disabled)
-    // if config.physics_enabled {
-    //     app.add_plugins(physics::PhysicsPlugin);
-    // }
+    // Add physics plugin if enabled
+    if config.physics_enabled {
+        app.add_plugins(physics::PhysicsPlugin);
+    }
 
     // Add renderer
     app.add_plugins(renderer::RendererPlugin);

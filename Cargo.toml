@@ -48,9 +48,9 @@ web-sys = { version = "0.3", features = [
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
-# Math and Physics (temporarily disabled for compilation)
+# Math and Physics
 nalgebra = { version = "0.33", features = ["serde-serialize"] }
-# rapier3d = { version = "0.23", features = ["serde-serialize"] }
+rapier3d = { version = "0.23", features = ["serde-serialize"] }
 
 # Graph structures
 petgraph = { version = "0.6", features = ["serde-1"] }
@@ -59,9 +59,9 @@ petgraph = { version = "0.6", features = ["serde-1"] }
 tracing = "0.1"
 tracing-wasm = "0.2"
 
-# [dependencies.bevy_rapier3d]
-# version = "0.27"
-# features = ["serde-serialize"]
+[dependencies.bevy_rapier3d]
+version = "0.27"
+features = ["serde-serialize"]
 
 [profile.release]
 opt-level = 3

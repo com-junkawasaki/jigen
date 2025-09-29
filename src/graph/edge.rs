@@ -35,7 +35,7 @@ pub struct Edge {
 }
 
 /// Types of relationships between vertices
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum EdgeType {
     /// Hierarchical parent-child relationship
     ParentChild,
@@ -122,7 +122,7 @@ pub enum EdgeProperties {
 }
 
 /// Constraint types for physics
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum ConstraintType {
     /// Distance constraint (fixed distance between points)
     Distance,
@@ -137,7 +137,7 @@ pub enum ConstraintType {
 }
 
 /// Force types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum ForceType {
     /// Gravitational attraction
     Gravity,
@@ -154,7 +154,7 @@ pub enum ForceType {
 }
 
 /// Force falloff functions
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum FalloffType {
     /// No falloff (constant force)
     Constant,
@@ -167,7 +167,7 @@ pub enum FalloffType {
 }
 
 /// Visual relationship types
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum VisualType {
     /// Lighting relationship (light affects object)
     Lighting,

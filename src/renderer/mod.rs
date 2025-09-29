@@ -3,6 +3,7 @@
 //! Provides Bevy-based rendering system with scene graph integration.
 
 use bevy::prelude::*;
+use bevy_rapier3d::prelude::*;
 use crate::graph::SceneGraph;
 
 /// Renderer plugin for Bevy
@@ -93,9 +94,22 @@ fn create_entity_from_vertex(
 
     // Set transform
     entity_commands.insert(Transform {
-        translation: vertex.transform.position.into(),
-        rotation: vertex.transform.rotation.into(),
-        scale: vertex.transform.scale.into(),
+        translation: Vec3::new(
+            vertex.transform.position.x,
+            vertex.transform.position.y,
+            vertex.transform.position.z,
+        ),
+        rotation: Quat::from_xyzw(
+            vertex.transform.rotation.i,
+            vertex.transform.rotation.j,
+            vertex.transform.rotation.k,
+            vertex.transform.rotation.w,
+        ),
+        scale: Vec3::new(
+            vertex.transform.scale.x,
+            vertex.transform.scale.y,
+            vertex.transform.scale.z,
+        ),
     });
 
     // Add geometry based on vertex properties
@@ -105,6 +119,33 @@ fn create_entity_from_vertex(
     entity_commands
         .insert(meshes.add(mesh))
         .insert(materials.add(material));
+
+    // Add physics body if physics state exists
+    if let Some(physics_state) = &vertex.physics_state {
+        match physics_state.is_kinematic {
+            false => {
+                entity_commands.insert(RigidBody::Dynamic);
+            }
+            true => {
+                entity_commands.insert(RigidBody::KinematicPositionBased);
+            }
+        }
+
+        // Add collider based on vertex geometry
+        let collider = create_collider_from_vertex(vertex);
+        entity_commands.insert(collider);
+
+        // Set mass if specified
+        if physics_state.mass > 0.0 {
+            entity_commands.insert(AdditionalMassProperties::Mass(physics_state.mass));
+        }
+
+        // Set initial velocity
+        entity_commands.insert(Velocity {
+            linvel: Vec3::new(physics_state.velocity.x, physics_state.velocity.y, physics_state.velocity.z),
+            angvel: Vec3::new(physics_state.angular_velocity.x, physics_state.angular_velocity.y, physics_state.angular_velocity.z),
+        });
+    }
 
     // Add lighting for light vertices
     match vertex.node_type {
@@ -134,9 +175,22 @@ fn update_entity_from_vertex(
 ) {
     // Update transform
     let transform = Transform {
-        translation: vertex.transform.position.into(),
-        rotation: vertex.transform.rotation.into(),
-        scale: vertex.transform.scale.into(),
+        translation: Vec3::new(
+            vertex.transform.position.x,
+            vertex.transform.position.y,
+            vertex.transform.position.z,
+        ),
+        rotation: Quat::from_xyzw(
+            vertex.transform.rotation.i,
+            vertex.transform.rotation.j,
+            vertex.transform.rotation.k,
+            vertex.transform.rotation.w,
+        ),
+        scale: Vec3::new(
+            vertex.transform.scale.x,
+            vertex.transform.scale.y,
+            vertex.transform.scale.z,
+        ),
     };
 
     commands.entity(entity).insert(transform);
@@ -149,6 +203,15 @@ fn create_mesh_from_vertex(vertex: &crate::graph::vertex::Vertex) -> Mesh {
 
     // Default to cube
     Cuboid::new(1.0, 1.0, 1.0).into()
+}
+
+/// Create collider from vertex properties
+fn create_collider_from_vertex(vertex: &crate::graph::vertex::Vertex) -> Collider {
+    // Parse collision shape from vertex properties (simplified)
+    // In practice, you'd deserialize the JSON properties
+
+    // Default to cuboid collider matching the mesh
+    Collider::cuboid(0.5, 0.5, 0.5)
 }
 
 /// Create material from vertex properties
@@ -196,16 +259,16 @@ pub fn camera_controller(
         let mut velocity = Vec3::ZERO;
 
         if keys.pressed(KeyCode::KeyW) || keys.pressed(KeyCode::ArrowUp) {
-            velocity += *transform.forward();
+            velocity += transform.forward();
         }
         if keys.pressed(KeyCode::KeyS) || keys.pressed(KeyCode::ArrowDown) {
-            velocity += *transform.back();
+            velocity += transform.back();
         }
         if keys.pressed(KeyCode::KeyA) || keys.pressed(KeyCode::ArrowLeft) {
-            velocity += *transform.left();
+            velocity += transform.left();
         }
         if keys.pressed(KeyCode::KeyD) || keys.pressed(KeyCode::ArrowRight) {
-            velocity += *transform.right();
+            velocity += transform.right();
         }
         if keys.pressed(KeyCode::KeyQ) {
             velocity += Vec3::Y;
