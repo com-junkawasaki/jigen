@@ -257,7 +257,39 @@ jigen/
 - **Performance**: New code should not regress performance
 - **Safety**: No unsafe code without justification
 
-## Performance Characteristics
+## Performance Dashboard
+
+Jigen includes a comprehensive web-based performance dashboard built with Astro:
+
+```bash
+# Build and serve the dashboard
+make dashboard
+make serve-dashboard
+
+# Or manually:
+cd apps/doc
+npm run dev    # Development server
+npm run build  # Production build
+```
+
+### Dashboard Features
+
+- **📊 Real-time Performance Charts**: Interactive charts showing parsing, loading, and physics performance
+- **🔬 Detailed Profiling**: Flame graphs and execution traces with memory usage analysis
+- **🎯 Benchmark Summary**: Overview of test results and performance trends
+- **📈 Performance Trends**: Historical performance data and regression detection
+- **🖥️ System Information**: Build details and performance targets
+
+### Accessing the Dashboard
+
+Once built, the dashboard is available at `docs/index.html` or served locally via `npm run dev`.
+
+#### Pages
+
+- **Dashboard** (`/`): Main performance overview with charts and summaries
+- **Profiling** (`/profiling`): Detailed profiling tools and flame graphs
+
+### Performance Characteristics
 
 Based on benchmark results:
 
@@ -266,6 +298,21 @@ Based on benchmark results:
 - **Topology Updates**: ~0.2ms for 100 nodes, ~0.8ms for 500 nodes
 - **Physics Simulation**: ~0.1ms per step (60 FPS)
 - **Memory Usage**: ~50KB base + ~1KB per node
+
+### Profiling Tools
+
+The dashboard includes built-in profiling tools:
+
+```bash
+# Run profiling analysis
+cargo bench -- --profile-time 10
+```
+
+Profiling data includes:
+- Execution traces with timing information
+- Memory usage per operation
+- Thread utilization analysis
+- Flame graphs for performance bottlenecks
 
 ## License
 

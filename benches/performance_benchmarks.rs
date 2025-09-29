@@ -10,6 +10,7 @@
 use jigen::dsl::{SceneParser, scene::*};
 use jigen::graph::SceneGraph;
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use jigen::performance::PerformanceCollector;
 use serde_json::json;
 use std::time::Instant;
 
@@ -72,6 +73,7 @@ fn generate_test_scene(node_count: usize) -> serde_json::Value {
 /// Benchmark scene parsing performance
 fn bench_scene_parsing(c: &mut Criterion) {
     let parser = SceneParser::new();
+    let mut collector = PerformanceCollector::new();
 
     let mut group = c.benchmark_group("scene_parsing");
 
@@ -79,18 +81,37 @@ fn bench_scene_parsing(c: &mut Criterion) {
         let scene_json = generate_test_scene(node_count);
         let json_str = scene_json.to_string();
 
-        group.bench_with_input(
+        let result = group.bench_with_input(
             format!("parse_{}_nodes", node_count),
             &json_str,
             |b, json| {
-                b.iter(|| {
-                    let _scene = parser.parse_json(json).unwrap();
+                b.iter_custom(|iters| {
+                    let mut times = Vec::new();
+                    for _ in 0..iters {
+                        let start = Instant::now();
+                        let _scene = parser.parse_json(json).unwrap();
+                        let elapsed = start.elapsed();
+                        times.push(elapsed.as_secs_f64() * 1000.0);
+                    }
+                    times.into_iter().sum::<f64>() / iters as f64
                 });
             }
         );
+
+        // Collect performance data
+        if let Some(measurement) = result {
+            collector.record_measurement(
+                &format!("parse_{}_nodes", node_count),
+                &[measurement],
+                "ms"
+            );
+        }
     }
 
     group.finish();
+
+    // Save performance data
+    let _ = collector.save_to_file("scene_parsing", "target/performance/scene_parsing.json");
 }
 
 /// Benchmark SceneGraph loading performance

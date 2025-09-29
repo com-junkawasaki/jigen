@@ -20,6 +20,7 @@
 
 pub mod dsl;
 pub mod graph;
+pub mod performance;
 pub mod physics;
 pub mod renderer;
 pub mod wasm;

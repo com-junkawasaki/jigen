@@ -1,0 +1,49 @@
+---
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Jigen Performance Dashboard" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+      <header class="mb-8">
+        <h1 class="text-4xl font-bold text-center mb-2">🚀 Jigen Performance Dashboard</h1>
+        <p class="text-gray-400 text-center">Real-time performance monitoring and analysis</p>
+
+        <nav class="flex justify-center mt-6">
+          <div class="bg-gray-800 rounded-lg p-1">
+            <a href="/" class="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-700 data-[active]:bg-blue-600 data-[active]:text-white">
+              📊 Dashboard
+            </a>
+            <a href="/profiling" class="px-4 py-2 rounded-md text-sm font-medium transition-colors hover:bg-gray-700 data-[active]:bg-blue-600 data-[active]:text-white ml-1">
+              🔬 Profiling
+            </a>
+          </div>
+        </nav>
+      </header>
+
+      <slot />
+
+      <footer class="mt-16 text-center text-gray-500">
+        <p>Built with <a href="https://astro.build" class="text-blue-400 hover:text-blue-300">Astro</a></p>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  @import "tailwindcss/base";
+  @import "tailwindcss/components";
+  @import "tailwindcss/utilities";
+</style>

@@ -1,3 +1,6 @@
+[workspace]
+members = ["."]
+
 [package]
 name = "jigen"
 version = "0.1.0"
@@ -83,3 +86,6 @@ wasm-opt = ["-O4", "--enable-reference-types", "--enable-bulk-memory"]
 [[bench]]
 name = "performance_benchmarks"
 harness = false
+
+[features]
+performance_monitoring = []

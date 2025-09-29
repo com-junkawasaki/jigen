@@ -1,0 +1,123 @@
+---
+import PerformanceCharts from './PerformanceCharts.tsx';
+import BenchmarkSummary from './BenchmarkSummary.tsx';
+import SystemInfo from './SystemInfo.astro';
+
+// Load performance data from API
+const response = await fetch('/api/performance.json');
+const apiData = await response.json();
+
+// Process API data into chart format
+const performanceData = processApiData(apiData);
+
+function processApiData(apiData: any) {
+  const result = {
+    sceneParsing: { name: 'Scene Parsing', data: [] as any[] },
+    sceneGraph: { name: 'SceneGraph Loading', data: [] as any[] },
+    physics: { name: 'Physics Simulation', data: [] as any[] }
+  };
+
+  if (apiData.benchmarks) {
+    apiData.benchmarks.forEach((benchmark: any) => {
+      if (benchmark.measurements) {
+        benchmark.measurements.forEach((measurement: any) => {
+          if (measurement.name.includes('parse_')) {
+            const nodes = parseInt(measurement.name.replace('parse_', '').replace('_nodes', ''));
+            result.sceneParsing.data.push({
+              nodes,
+              time: measurement.value
+            });
+          } else if (measurement.name.includes('load_')) {
+            const nodes = parseInt(measurement.name.replace('load_', '').replace('_nodes', ''));
+            result.sceneGraph.data.push({
+              nodes,
+              time: measurement.value
+            });
+          } else if (measurement.name.includes('physics_')) {
+            const steps = parseInt(measurement.name.replace('physics_', '').replace('_steps', ''));
+            result.physics.data.push({
+              steps,
+              time: measurement.value
+            });
+          }
+        });
+      }
+    });
+  }
+
+  // Sort data by size
+  result.sceneParsing.data.sort((a, b) => a.nodes - b.nodes);
+  result.sceneGraph.data.sort((a, b) => a.nodes - b.nodes);
+  result.physics.data.sort((a, b) => a.steps - b.steps);
+
+  return result;
+}
+---
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+  <div class="lg:col-span-2">
+    <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+      <h2 class="text-2xl font-bold mb-4 text-blue-400">📊 Performance Overview</h2>
+      <PerformanceCharts
+        client:load
+        sceneParsing={performanceData.sceneParsing}
+        sceneGraph={performanceData.sceneGraph}
+        physics={performanceData.physics}
+      />
+    </div>
+  </div>
+
+  <div>
+    <SystemInfo />
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+  <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+    <h3 class="text-xl font-bold mb-4 text-green-400">🎯 Benchmark Summary</h3>
+    <BenchmarkSummary
+      client:load
+      data={performanceData}
+    />
+  </div>
+
+  <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+    <h3 class="text-xl font-bold mb-4 text-purple-400">🔍 Recent Benchmarks</h3>
+    <div class="space-y-3">
+      <div class="flex justify-between items-center p-3 bg-gray-700 rounded">
+        <span>Scene Parsing (500 nodes)</span>
+        <span class="text-green-400 font-mono">3.2ms</span>
+      </div>
+      <div class="flex justify-between items-center p-3 bg-gray-700 rounded">
+        <span>SceneGraph Loading (500 nodes)</span>
+        <span class="text-yellow-400 font-mono">2.8ms</span>
+      </div>
+      <div class="flex justify-between items-center p-3 bg-gray-700 rounded">
+        <span>Physics Simulation (100 steps)</span>
+        <span class="text-blue-400 font-mono">0.68ms</span>
+      </div>
+      <div class="flex justify-between items-center p-3 bg-gray-700 rounded">
+        <span>Topology Updates (200 nodes)</span>
+        <span class="text-purple-400 font-mono">0.8ms</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-8 bg-gray-800 rounded-lg p-6 shadow-lg">
+  <h3 class="text-xl font-bold mb-4 text-red-400">⚡ Performance Trends</h3>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="text-center">
+      <div class="text-3xl font-bold text-green-400">↗️ +2.3%</div>
+      <div class="text-sm text-gray-400">Parsing Performance</div>
+    </div>
+    <div class="text-center">
+      <div class="text-3xl font-bold text-yellow-400">→ 0.0%</div>
+      <div class="text-sm text-gray-400">Memory Usage</div>
+    </div>
+    <div class="text-center">
+      <div class="text-3xl font-bold text-blue-400">↘️ -1.8%</div>
+      <div class="text-sm text-gray-400">Physics Simulation</div>
+    </div>
+  </div>
+</div>

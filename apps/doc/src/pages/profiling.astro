@@ -1,0 +1,16 @@
+---
+import Layout from '../components/Layout.astro';
+import ProfilerDashboard from '../components/ProfilerDashboard.tsx';
+---
+
+<Layout title="Jigen Profiling Dashboard">
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold mb-4 text-purple-400">🔬 Performance Profiling</h2>
+    <p class="text-gray-400 mb-6">
+      Detailed performance analysis and profiling tools for Jigen components.
+      Monitor memory usage, execution traces, and identify performance bottlenecks.
+    </p>
+  </div>
+
+  <ProfilerDashboard client:load />
+</Layout>
