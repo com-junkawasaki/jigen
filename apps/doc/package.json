@@ -15,11 +15,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@astrojs/react": "^4.4.0",
+    "@astrojs/react": "^6.0.1",
     "@astrojs/tailwind": "^6.0.2",
     "@types/react": "^19.1.15",
     "@types/react-dom": "^19.1.9",
-    "astro": "^5.14.1",
+    "astro": "^7.1.0",
     "chart.js": "^4.5.0",
     "d3": "^7.9.0",
     "react": "^19.1.1",
